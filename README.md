@@ -1,47 +1,59 @@
 # Getting-and-Cleaning-Data-Course-Project
 # Background Peer graded Assignment Getting and Cleaning Data Course Project Oct-2016
+# get_project_data.R
+It is the script that was used to download and unzip the files, needed to perform the analysis in the first place. It is recommended to use it but not necessary, as long as the files for the 'Human Activity Recognition Using Smartphones Dataset Version 1.0' are present in a folder with name 'UCI HAR Dataset' in the working directory. A lot of comments explain the code and informative messages are printed in console while it is executed, describing what it tries to do. Also, it creates a file with name 'log.txt' in the current working directory (only if it downloads the zipped data) to store the url and the date of the download. If the a folder with name 'UCI HAR Dataset' already exists in the working directory it just informs the user about it's existence and doesn't download the files.
+# run_analysis.R
+It is the main script of the repository.
+In order to produce the 'tidy_data_summary' table, the script 'run_analysis.R' was created and used. It performs the following tasks:
 
-##Getting and Cleaning Data - peer assessment project
+Merges the training and the test sets to create one data set with target variables.
+Binds these files,
 
-The purpose of this project is to demonstrate your ability to collect, work with, and clean a data set. The goal is to prepare tidy data that can be used for later analysis. You will be graded by your peers on a series of yes/no questions related to the project. You will be required to submit: 1) a tidy data set as described below, 2) a link to a Github repository with your script for performing the analysis, and 3) a code book that describes the variables, the data, and any transformations or work that you performed to clean up the data called CodeBook.md. You should also include a README.md in the repo with your scripts. This repo explains how all of the scripts work and how they are connected.
+UCI HAR Dataset/train/subject_train.txt
+UCI HAR Dataset/train/X_train.txt
+UCI HAR Dataset/train/y_train.txt
+from the train set by columns to a table that contains, the human subject, the activity performed and the values of the features.
 
-One of the most exciting areas in all of data science right now is wearable computing - see for example this article . Companies like Fitbit, Nike, and Jawbone Up are racing to develop the most advanced algorithms to attract new users. The data linked to from the course website represent data collected from the accelerometers from the Samsung Galaxy S smartphone. A full description is available at the site where the data was obtained:
+Binds these files,
 
-http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones
+UCI HAR Dataset/test/subject_test.txt
+UCI HAR Dataset/test/X_test.txt
+UCI HAR Dataset/test/y_test.txt
+from the test set by columns to a table that contains, the human subject, the activity performed and the values of the features.
 
-Here are the data for the project:
+Binds the data frames created for test and train set into one large dataset by rows.
 
-https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
+Extracts only the measurements on the mean and standard deviation for each measurement.
+Finds the target features, which are the features with measurements about mean and standard deviation, and extracts them as well as those that indicate the 'subject' and 'activity' and creates a new data table only with the target variables.
+Uses descriptive activity names to name the activities in the data set.
+Replace the variable about activity, that contains integers from 1 to 6, with a factor based on levels and labels contained in the 'activity_labels' data file.
+Appropriately labels the data set with target variables with descriptive names.
+Extracts the target variable names from 'features.txt'.
+Corrects a typo that exists in some feature names, that is to replace 'BodyBody' that appears in the names of some features with just 'Body'.
+Creates a new tidy dataset with the appropriate labels for the variable names.
+From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+Group the tidy data table created in step 4, by 'subject' and 'activity'.
 
+Summarize each variable to find the average for the grouped values.
 
-You should create one R script called run_analysis.R that does the following.
+Ungroup the data table.
 
-1. Merges the training and the test sets to create one data set.
-2. Extracts only the measurements on the mean and standard deviation for each measurement.
-3. Uses descriptive activity names to name the activities in the data set
-4. Appropriately labels the data set with descriptive variable names.
-5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+Add descriptive names to the variables of the new tidy data table, by adding the prefix 'Avrg-' in the names of the target feature averages.
 
-#In the run_analysis.R script,  were recreated  each step.
+Write the data in a text file in the present working directory, by the command:
 
-This file 'run_analysis.R' contains all the code to perform the analyses described in the 5 steps. They can be launched in RStudio by just importing the file.
+write.table(tidy_data_summary, "tidy_data_summary.txt", row.names = FALSE) 
 
-## About this R script
-File with R code "run_analysis.R" perform 5 following steps (in accordance assigned task of course work):   
-1. Merging the training and the test sets to create one data set.   
-  1.1 Reading files    
-    1.1.1 Reading trainings tables   
-    1.1.2 Reading testing tables   
-    1.1.3 Reading feature vector   
-    1.1.4 Reading activity labels   
-  1.2 Assigning column names   
-  1.3 Merging all data in one set   
-2. Extracting only the measurements on the mean and standard deviation for each measurement   
-  2.1 Reading column names  
-  2.2 Create vector for defining ID, mean and standard deviation   
-  2.3 Making nessesary subset from setAllInOne   
-3. Using descriptive activity names to name the activities in the data set   
-4. Appropriately labeling the data set with descriptive variable names   
-5. Creating a second, independent tidy data set with the average of each variable for each activity and each subject   
-  5.1 Making second tidy data set   
-  5.2 Writing second tidy data set in txt file
+# tidy_data_summary.txt
+The tidy dataset that was produced by the script 'run_analysis.txt', which contains the averages of selected features from the original 'Human Activity Recognition Using Smartphones Dataset Version 1.0'
+
+To read the table back on R correctly, you can use the following command:
+
+tidy_data_summary <- read.table(file = "tidy_data_summary.txt",
+                                header = TRUE, check.names = FALSE, dec = ".") 
+Or for faster loading some additional arguments can be specified:
+
+tidy_data_summary <- read.table(file  = "tidy_data_summary.txt", 
+                                header = TRUE, check.names = FALSE, dec = ".", 
+                                colClasses = c("numeric", "factor", rep("numeric", 66)), 
+                                nrows = 180, comment.char = "", quote = "") 
