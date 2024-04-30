@@ -1,5 +1,5 @@
 # Getting-and-Cleaning-Data-Course-Project
-# Background Peer graded Assignment Getting and Cleaning Data Course Project Oct-2016
+
 # get_project_data.R
 It is the script that was used to download and unzip the files, needed to perform the analysis in the first place. It is recommended to use it but not necessary, as long as the files for the 'Human Activity Recognition Using Smartphones Dataset Version 1.0' are present in a folder with name 'UCI HAR Dataset' in the working directory. A lot of comments explain the code and informative messages are printed in console while it is executed, describing what it tries to do. Also, it creates a file with name 'log.txt' in the current working directory (only if it downloads the zipped data) to store the url and the date of the download. If the a folder with name 'UCI HAR Dataset' already exists in the working directory it just informs the user about it's existence and doesn't download the files.
 # run_analysis.R
